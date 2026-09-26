@@ -15,4 +15,3 @@ sqlparse==0.6.0
 tzdata==2026.3
 uvicorn==0.54.0
 whitenoise==6.12.0
-
