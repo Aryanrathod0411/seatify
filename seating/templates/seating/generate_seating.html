@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Generate Seating - SEATIFY</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .navbar {
+            background: #0c1c33;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .navbar span {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #0c1c33;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 15px;
+            margin-bottom: 20px;
+            background: white;
+        }
+
+        /* Branch Section */
+
+        .branch-box {
+            background: #f4f7fb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .branch-title {
+            font-weight: bold;
+            color: #0c1c33;
+            margin-bottom: 12px;
+        }
+
+        .branch-option {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .branch-option:last-child {
+            margin-bottom: 0;
+        }
+
+        .branch-option input {
+            width: auto;
+            margin: 0 10px 0 0;
+        }
+
+        /* Room Section */
+
+        .room-box {
+            background: #f4f7fb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .room-option {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .room-option:last-child {
+            margin-bottom: 0;
+        }
+
+        .room-option input {
+            width: auto;
+            margin: 0 10px 0 0;
+        }
+
+        .generate-btn {
+            background: #0c1c33;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 7px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .generate-btn:hover {
+            background: #162d4f;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #0c1c33;
+            font-weight: bold;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background: #0c1c33;
+            color: white;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <h2>SEATIFY</h2>
+
+        <span>Smart Exam Seating Management System</span>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <!-- Generate Seating Card -->
+
+        <div class="card">
+
+            <h2>Generate Exam Seating</h2>
+
+
+            {% if error %}
+
+            <div class="error">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <!-- Select Exam -->
+
+                <label>
+                    Select Exam
+                </label>
+
+                <select name="exam_id" required>
+
+                    <option value="">
+                        Select Exam
+                    </option>
+
+                    {% for exam in exams %}
+
+                    <option value="{{ exam.id }}">
+
+                        {{ exam.subject }}
+                        -
+                        Semester {{ exam.semester }}
+                        -
+                        {{ exam.exam_date }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <!-- Select Branches -->
+
+                <label>
+                    Select Branches
+                </label>
+
+                <div class="branch-box">
+
+                    <div class="branch-title">
+                        Choose branches for this exam
+                    </div>
+
+
+                    {% for branch in branches %}
+
+                    <label class="branch-option">
+
+                        <input
+                            type="checkbox"
+                            name="branches"
+                            value="{{ branch }}"
+                        >
+
+                        {{ branch }}
+
+                    </label>
+
+                    {% empty %}
+
+                    <div>
+                        No branches available.
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Select Rooms -->
+
+                <label>
+                    Select Rooms
+                </label>
+
+                <div class="room-box">
+
+                    {% for room in rooms %}
+
+                    <label class="room-option">
+
+                        <input
+                            type="checkbox"
+                            name="room_ids"
+                            value="{{ room.id }}"
+                        >
+
+                        Room {{ room.room_number }}
+                        -
+                        Capacity {{ room.capacity }}
+
+                    </label>
+
+                    {% empty %}
+
+                    <div>
+                        No rooms available.
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="generate-btn"
+                >
+                    Generate Seating
+                </button>
+
+            </form>
+
+
+            <a
+                href="{% url 'admin_panel' %}"
+                class="back-btn"
+            >
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+
+
+        <!-- Generated Seating -->
+
+        {% if seatings %}
+
+        <div class="card">
+
+            <h2>Generated Seating Arrangement</h2>
+
+
+            <a
+                href="/seating/export-excel/?exam_id={{ seatings.0.exam.id }}"
+                style="
+                    display: inline-block;
+                    background: #0c1c33;
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 7px;
+                    text-decoration: none;
+                    margin-bottom: 20px;
+                    font-weight: bold;
+                "
+            >
+                📊 Download Excel
+            </a>
+
+
+            <div class="success">
+                Seating arrangement generated successfully.
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Roll Number
+                            </th>
+
+                            <th>
+                                Student Name
+                            </th>
+
+                            <th>
+                                Branch
+                            </th>
+
+                            <th>
+                                Room
+                            </th>
+
+                            <th>
+                                Row
+                            </th>
+
+                            <th>
+                                Table
+                            </th>
+
+                            <th>
+                                Seat
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for seating in seatings %}
+
+                        <tr>
+
+                            <td>
+                                {{ seating.student.roll_number }}
+                            </td>
+
+                            <td>
+                                {{ seating.student.name }}
+                            </td>
+
+                            <td>
+                                {{ seating.student.branch }}
+                            </td>
+
+                            <td>
+                                Room {{ seating.room.room_number }}
+                            </td>
+
+                            <td>
+                                {{ seating.row_number }}
+                            </td>
+
+                            <td>
+                                {{ seating.table_number }}
+                            </td>
+
+                            <td>
+                                {{ seating.seat_number }}
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="empty"
+                            >
+                                No seating generated yet.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+</body>
+
+</html>

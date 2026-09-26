@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SEATIFY - Upload Students</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+        .header {
+            background: #0c1c33;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            text-align: center;
+            color: #0c1c33;
+            margin-bottom: 10px;
+        }
+
+        .info {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .file-box {
+            border: 2px dashed #0c1c33;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #0c1c33;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #17365d;
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #0c1c33;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>SEATIFY</h1>
+        <p>Smart Exam Seating Management System</p>
+    </div>
+
+    <div class="container">
+
+        <div class="card">
+
+            <h2>Upload Student Data</h2>
+
+            <p class="info">
+                Upload an Excel file containing student information.
+            </p>
+
+            {% if error %}
+            <p style="color: #991b1b; text-align: center;">
+                {{ error }}
+            </p>
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                <div class="file-box">
+
+                    <p>
+                        Select Excel File
+                    </p>
+
+                    <input
+                        type="file"
+                        name="student_file"
+                        accept=".xlsx,.xls"
+                        required
+                    >
+
+                </div>
+
+                <button type="submit">
+                    Upload Students
+                </button>
+
+            </form>
+
+            <a href="{% url 'admin_panel' %}" class="back-btn">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

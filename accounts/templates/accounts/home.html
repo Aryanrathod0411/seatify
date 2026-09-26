@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SEATIFY | Smart Exam Seating Management</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #0b1f3a;
+            min-height: 100vh;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            height: 78px;
+            background: #0b1f3a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 70px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .logo {
+            color: white;
+            font-size: 29px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        .logo span {
+            color: #9db8d8;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 17px;
+            border-radius: 6px;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .nav-login {
+            border: 1px solid #9db8d8;
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+            min-height: 530px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 70px 20px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 850px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e6edf6;
+            color: #0b1f3a;
+            padding: 9px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            border: 1px solid #d3ddea;
+        }
+
+        .hero h1 {
+            font-size: 58px;
+            line-height: 1.1;
+            font-weight: 700;
+            margin-bottom: 22px;
+            color: #0b1f3a;
+        }
+
+        .hero h1 span {
+            color: #234d7d;
+        }
+
+        .hero-description {
+            max-width: 700px;
+            margin: auto;
+            font-size: 18px;
+            line-height: 1.7;
+            color: #5f6d7e;
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .hero-buttons {
+            margin-top: 35px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #0b1f3a;
+            color: white;
+            border: 2px solid #0b1f3a;
+        }
+
+        .btn-primary:hover {
+            background: #173b68;
+            border-color: #173b68;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #0b1f3a;
+            border: 2px solid #0b1f3a;
+        }
+
+        .btn-secondary:hover {
+            background: #e9eff7;
+            transform: translateY(-2px);
+        }
+
+        /* ================= STATS ================= */
+
+        .stats {
+            max-width: 950px;
+            margin: -35px auto 60px;
+            position: relative;
+            z-index: 5;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            padding: 0 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e0e6ee;
+            border-radius: 12px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(11, 31, 58, 0.08);
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0b1f3a;
+            margin-bottom: 6px;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: #6a7686;
+        }
+
+        /* ================= FEATURES ================= */
+
+        .features-section {
+            max-width: 1150px;
+            margin: auto;
+            padding: 20px 25px 75px;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 42px;
+        }
+
+        .section-heading h2 {
+            font-size: 34px;
+            color: #0b1f3a;
+            margin-bottom: 12px;
+        }
+
+        .section-heading p {
+            color: #687587;
+            font-size: 16px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+        }
+
+        .feature-card {
+            background: white;
+            border: 1px solid #e1e6ed;
+            border-radius: 13px;
+            padding: 30px 22px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(11, 31, 58, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 14px 32px rgba(11, 31, 58, 0.12);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #e7eef7;
+            color: #0b1f3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .feature-card h3 {
+            color: #0b1f3a;
+            font-size: 19px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: #687587;
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
+        /* ================= HOW IT WORKS ================= */
+
+        .workflow-section {
+            background: white;
+            padding: 70px 25px;
+            border-top: 1px solid #e3e8ef;
+            border-bottom: 1px solid #e3e8ef;
+        }
+
+        .workflow-container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .workflow-heading {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .workflow-heading h2 {
+            font-size: 34px;
+            color: #0b1f3a;
+            margin-bottom: 12px;
+        }
+
+        .workflow-heading p {
+            color: #687587;
+        }
+
+        .workflow {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background: #0b1f3a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .step h3 {
+            font-size: 17px;
+            color: #0b1f3a;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #687587;
+        }
+
+        /* ================= CTA ================= */
+
+        .cta {
+            max-width: 1000px;
+            margin: 70px auto;
+            padding: 55px 30px;
+            background: #0b1f3a;
+            color: white;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 12px 35px rgba(11, 31, 58, 0.15);
+        }
+
+        .cta h2 {
+            font-size: 32px;
+            margin-bottom: 13px;
+        }
+
+        .cta p {
+            color: #d5deea;
+            max-width: 650px;
+            margin: auto;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 13px 28px;
+            background: white;
+            color: #0b1f3a;
+            text-decoration: none;
+            border-radius: 7px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .cta-button:hover {
+            background: #e7edf5;
+            transform: translateY(-2px);
+        }
+
+        /* ================= FOOTER ================= */
+
+        .footer {
+            background: #08182d;
+            color: #cbd5e2;
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        .footer-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .footer p {
+            font-size: 13px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 950px) {
+
+            .navbar {
+                padding: 0 30px;
+            }
+
+            .features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .workflow {
+                grid-template-columns: repeat(2, 1fr);
+                row-gap: 35px;
+            }
+
+            .hero h1 {
+                font-size: 48px;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                height: auto;
+                padding: 18px 20px;
+                flex-direction: column;
+                gap: 14px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 55px 18px 70px;
+            }
+
+            .hero h1 {
+                font-size: 38px;
+            }
+
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+                margin-top: -25px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow {
+                grid-template-columns: 1fr;
+            }
+
+            .section-heading h2,
+            .workflow-heading h2 {
+                font-size: 28px;
+            }
+
+            .cta {
+                margin: 50px 20px;
+            }
+
+            .cta h2 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            SEAT<span>IFY</span>
+            
+        </div>
+
+        <div class="nav-links">
+            
+        </div>
+
+    </nav>
+
+
+    <!-- ================= HERO ================= -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="badge">
+                Smart Examination Management System
+            </div>
+
+            <h1>
+                Smarter Seating.<br>
+                <span>Simpler Exams.</span>
+            </h1>
+
+            <p class="hero-description">
+                SEATIFY is a smart exam seating management system that
+                helps colleges organize students, manage examinations,
+                generate seating arrangements and provide quick seat
+                information.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="/faculty/login/" class="btn btn-primary">
+                    Faculty Login
+                </a>
+
+                <a href="/students/seat/" class="btn btn-secondary">
+                    Find My Seat
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= STATS ================= -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+            <div class="stat-number">01</div>
+            <div class="stat-title">Smart Management</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number">24×7</div>
+            <div class="stat-title">Seat Information Access</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number">100%</div>
+            <div class="stat-title">Digital Process</div>
+        </div>
+
+    </section>
+
+
+    <!-- ================= FEATURES ================= -->
+
+    <section class="features-section">
+
+        <div class="section-heading">
+
+            <h2>Everything You Need</h2>
+
+            <p>
+                A complete solution for modern examination seating management.
+            </p>
+
+        </div>
+
+
+        <div class="features">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    👨‍🎓
+                </div>
+
+                <h3>Student Management</h3>
+
+                <p>
+                    Manage student information including roll number,
+                    branch, semester and enrollment details.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📋
+                </div>
+
+                <h3>Exam Management</h3>
+
+                <p>
+                    Manage examination schedules, subjects, dates,
+                    timings and semester information.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ⚙️
+                </div>
+
+                <h3>Automatic Seating</h3>
+
+                <p>
+                    Generate organized seating arrangements automatically
+                    based on students and available rooms.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🪑
+                </div>
+
+                <h3>Visual Seat Map</h3>
+
+                <p>
+                    View room-wise seating arrangements with row,
+                    table and seat information.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= HOW IT WORKS ================= -->
+
+    <section class="workflow-section">
+
+        <div class="workflow-container">
+
+            <div class="workflow-heading">
+
+                <h2>How SEATIFY Works</h2>
+
+                <p>
+                    Simple steps for efficient examination management.
+                </p>
+
+            </div>
+
+
+            <div class="workflow">
+
+                <div class="step">
+
+                    <div class="step-number">
+                        1
+                    </div>
+
+                    <h3>Manage Students</h3>
+
+                    <p>
+                        Upload and manage student information.
+                    </p>
+
+                </div>
+
+
+                <div class="step">
+
+                    <div class="step-number">
+                        2
+                    </div>
+
+                    <h3>Schedule Exam</h3>
+
+                    <p>
+                        Add examination and timetable details.
+                    </p>
+
+                </div>
+
+
+                <div class="step">
+
+                    <div class="step-number">
+                        3
+                    </div>
+
+                    <h3>Generate Seats</h3>
+
+                    <p>
+                        Automatically create the seating arrangement.
+                    </p>
+
+                </div>
+
+
+                <div class="step">
+
+                    <div class="step-number">
+                        4
+                    </div>
+
+                    <h3>Find Seat</h3>
+
+                    <p>
+                        Students can quickly find their assigned seat.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= CTA ================= -->
+
+    <section class="cta">
+
+        <h2>
+            Ready to Manage Your Examination?
+        </h2>
+
+        <p>
+            Login as faculty to manage students, examinations,
+            rooms and generate smart seating arrangements.
+        </p>
+
+        <a href="/faculty/login/" class="cta-button">
+            Go to Faculty Login
+        </a>
+
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <div class="footer-title">
+            SEATIFY
+        </div>
+
+        <p>
+            Smart Exam Seating Management System
+        </p>
+
+        <p style="margin-top: 8px;">
+            © 2026 SEATIFY. Academic Project.
+        </p>
+
+    </footer>
+
+</body>
+</html>

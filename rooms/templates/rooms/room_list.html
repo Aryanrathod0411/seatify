@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SEATIFY - Room Management</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+        .header {
+            background: #0c1c33;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        h2 {
+            color: #0c1c33;
+            margin-bottom: 25px;
+        }
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #0c1c33;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f4f7fb;
+        }
+
+        .capacity {
+            font-weight: bold;
+            color: #0c1c33;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+.action-btn {
+    display: inline-block;
+    padding: 11px 18px;
+    background: #0c1c33;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+.action-btn:hover {
+    background: #17365d;
+}
+
+.row-actions {
+    display: flex;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.row-actions a {
+    color: #0c1c33;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.row-actions a.delete {
+    color: #a33b32;
+}
+
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>SEATIFY</h1>
+        <p>Smart Exam Seating Management System</p>
+    </div>
+
+    <div class="container">
+
+        <a href="{% url 'admin_panel' %}" class="action-btn" style="margin-right: 10px;">Back to Dashboard</a>
+        <h2>Room Management</h2>
+
+        <div style="margin-bottom: 20px;">
+    <a href="/rooms/add/" class="action-btn">
+        + Add Room
+    </a>
+</div>
+
+        <div class="table-container">
+
+            <table>
+
+                <tr>
+                    <th>Room Number</th>
+                    <th>Rows</th>
+                    <th>Tables Per Row</th>
+                    <th>Seats Per Table</th>
+                    <th>Total Capacity</th>
+                    <th>Actions</th>
+                </tr>
+
+                {% for room in rooms %}
+
+                <tr>
+                    <td>{{ room.room_number }}</td>
+                    <td>{{ room.rows }}</td>
+                    <td>{{ room.tables_per_row }}</td>
+                    <td>{{ room.seats_per_table }}</td>
+                    <td class="capacity">{{ room.capacity }}</td>
+                    <td class="row-actions">
+                        <a href="{% url 'edit_room' room.id %}">Edit</a>
+                        <a class="delete" href="{% url 'delete_room' room.id %}">Delete</a>
+                    </td>
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="6" class="empty">
+                        No rooms found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SEATIFY - Exam Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #0c1c33;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            color: #d1d5db;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1250px;
+            margin: 35px auto;
+        }
+
+        .title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        h2 {
+            color: #0c1c33;
+            margin: 0;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: inline-block;
+            padding: 11px 18px;
+            background: #0c1c33;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .action-btn:hover {
+            background: #17365d;
+        }
+
+        .past-btn {
+            background: #6b7280;
+        }
+
+        .past-btn:hover {
+            background: #4b5563;
+        }
+
+        .back-btn {
+            background: #0c1c33;
+        }
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #0c1c33;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f4f7fb;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .upcoming {
+            color: #166534;
+        }
+
+        .ongoing {
+            color: #92400e;
+        }
+
+        .completed {
+            color: #991b1b;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+        }
+
+        .past-info {
+            background: #f3f4f6;
+            padding: 15px 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #4b5563;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .row-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 7px;
+            white-space: nowrap;
+        }
+
+        .row-actions a {
+            color: #0c1c33;
+            font-size: 12px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .row-actions a.delete {
+            color: #a33b32;
+        }
+
+.dashboard-btn {
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 10px 16px;
+    background: #e5e7eb;
+    color: #0c1c33;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.dashboard-btn:hover {
+    background: #d1d5db;
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>SEATIFY</h1>
+
+        <p>
+            Smart Exam Seating Management System
+        </p>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <!-- ================================================= -->
+        <!-- UPCOMING EXAMS -->
+        <!-- ================================================= -->
+
+        <div id="upcoming-section">
+
+            <div class="title-row">
+                <a
+                    href="{% url 'admin_panel' %}"
+                    class="dashboard-btn"
+                >
+                    ← Back to Dashboard
+                </a>
+
+                <h2>
+                    Exam Management
+                </h2>
+
+                <div class="buttons">
+
+                    <a
+                        href="/exams/add/"
+                        class="action-btn"
+                    >
+                        + Add Exam
+                    </a>
+
+                    <a
+                        href="/exams/upload-timetable/"
+                        class="action-btn"
+                    >
+                        📅 Upload Timetable
+                    </a>
+
+                    <button
+                        type="button"
+                        class="action-btn past-btn"
+                        onclick="showPastExams()"
+                    >
+                        📁 Past Exams
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Exam Name
+                            </th>
+
+                            <th>
+                                Subject
+                            </th>
+
+                            <th>
+                                Semester
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Start Time
+                            </th>
+
+                            <th>
+                                End Time
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for exam in upcoming_exams %}
+
+                        <tr>
+
+                            <td>
+                                {{ exam.exam_name }}
+                            </td>
+
+                            <td>
+                                {{ exam.subject }}
+                            </td>
+
+                            <td>
+                                {{ exam.semester }}
+                            </td>
+
+                            <td>
+                                {{ exam.exam_date|date:"M d, Y" }}
+                            </td>
+
+                            <td>
+                                {{ exam.start_time|time:"g a" }}
+                            </td>
+
+                            <td>
+                                {{ exam.end_time|time:"g a" }}
+                            </td>
+
+                            <td class="status">
+
+                                {% if exam.status == "Ongoing" %}
+
+                                    <span class="ongoing">
+                                        Ongoing
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="upcoming">
+                                        Upcoming
+                                    </span>
+
+                                {% endif %}
+
+                                <div class="row-actions">
+                                    <a href="{% url 'edit_exam' exam.id %}">Edit</a>
+                                    <a class="delete" href="{% url 'delete_exam' exam.id %}">Delete</a>
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="empty"
+                            >
+                                No upcoming exams found.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================================================= -->
+        <!-- PAST EXAMS -->
+        <!-- ================================================= -->
+
+        <div
+            id="past-section"
+            class="hidden"
+        >
+
+            <div class="section-title">
+
+                <h2>
+                    📁 Past Exams
+                </h2>
+
+                <button
+                    type="button"
+                    class="action-btn back-btn"
+                    onclick="showUpcomingExams()"
+                >
+                    ← Back to Upcoming Exams
+                </button>
+
+            </div>
+
+
+            <div class="past-info">
+
+                These examinations have already taken place.
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Exam Name
+                            </th>
+
+                            <th>
+                                Subject
+                            </th>
+
+                            <th>
+                                Semester
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Start Time
+                            </th>
+
+                            <th>
+                                End Time
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for exam in past_exams %}
+
+                        <tr>
+
+                            <td>
+                                {{ exam.exam_name }}
+                            </td>
+
+                            <td>
+                                {{ exam.subject }}
+                            </td>
+
+                            <td>
+                                {{ exam.semester }}
+                            </td>
+
+                            <td>
+                                {{ exam.exam_date|date:"M d, Y" }}
+                            </td>
+
+                            <td>
+                                {{ exam.start_time|time:"g a" }}
+                            </td>
+
+                            <td>
+                                {{ exam.end_time|time:"g a" }}
+                            </td>
+
+                            <td class="status">
+
+                                <span class="completed">
+                                    Completed
+                                </span>
+
+                                <div class="row-actions">
+                                    <a href="{% url 'edit_exam' exam.id %}">Edit</a>
+                                    <a class="delete" href="{% url 'delete_exam' exam.id %}">Delete</a>
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="empty"
+                            >
+                                No past exams found.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ================================================= -->
+
+    <script>
+
+        function showPastExams() {
+
+            document.getElementById(
+                "upcoming-section"
+            ).classList.add("hidden");
+
+            document.getElementById(
+                "past-section"
+            ).classList.remove("hidden");
+
+        }
+
+
+        function showUpcomingExams() {
+
+            document.getElementById(
+                "past-section"
+            ).classList.add("hidden");
+
+            document.getElementById(
+                "upcoming-section"
+            ).classList.remove("hidden");
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

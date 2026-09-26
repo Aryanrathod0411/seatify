@@ -1,0 +1,468 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SEATIFY - Student Portal</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #0c1c33;
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            opacity: 0.85;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 700px;
+            margin: 45px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 32px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .title {
+            text-align: center;
+            color: #0c1c33;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-bottom: 18px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #0c1c33;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #0c1c33;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #17365d;
+        }
+
+        .seat-box {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f4f7fb;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .seat-box h2 {
+            text-align: center;
+            color: #0c1c33;
+            margin-top: 0;
+            margin-bottom: 22px;
+        }
+
+        .detail {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .detail:last-of-type {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #4b5563;
+        }
+
+        .detail-value {
+            font-weight: bold;
+            color: #0c1c33;
+            text-align: right;
+        }
+
+        .seat-highlight {
+            margin-top: 22px;
+            background: #0c1c33;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .seat-highlight small {
+            display: block;
+            opacity: 0.8;
+            margin-bottom: 6px;
+        }
+
+        .seat-highlight strong {
+            font-size: 30px;
+        }
+
+        .error {
+            margin-top: 20px;
+            padding: 13px;
+            background: #fee2e2;
+            color: #991b1b;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .footer-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #0c1c33;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: 94%;
+                margin: 30px auto;
+            }
+
+            .card {
+                padding: 22px;
+            }
+
+            .detail {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .detail-value {
+                text-align: left;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="header">
+
+        <h1>SEATIFY</h1>
+
+        <p>
+            Smart Exam Seating Management System
+        </p>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <div class="card">
+
+
+            <h2 class="title">
+                Find Your Exam Seat
+            </h2>
+
+            <p class="subtitle">
+                Enter your enrollment number to view your seating details.
+            </p>
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+
+
+
+
+                <label>
+    Select Exam
+</label>
+
+<select
+    name="exam_id"
+    required
+    style="
+        width: 100%;
+        padding: 13px;
+        margin: 10px 0 20px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 15px;
+        background: white;
+    "
+>
+
+    <option value="">
+        Select your exam
+    </option>
+
+    {% for exam in exams %}
+
+    <option
+        value="{{ exam.id }}"
+        {% if exam_id|stringformat:"s" == exam.id|stringformat:"s" %}
+        selected
+        {% endif %}
+    >
+
+        {{ exam.subject }}
+        - Semester {{ exam.semester }}
+        - {{ exam.exam_date }}
+
+    </option>
+
+    {% endfor %}
+
+</select>
+
+                <label>
+                    Enrollment Number
+                </label>
+
+
+                <input
+                    type="text"
+                    name="enrollment_number"
+                    value="{{ enrollment_number }}"
+                    placeholder="Enter your enrollment number"
+                    required
+                >
+
+
+                <button type="submit">
+                    Find My Seat
+                </button>
+
+            </form>
+
+
+            {% if seating %}
+
+
+            <div class="seat-box">
+
+
+                <h2>
+                    Your Seating Details
+                </h2>
+
+
+                <div class="detail">
+
+                    <span class="detail-label">
+                        Enrollment Number
+                    </span>
+
+                    <span class="detail-value">
+                        {{ seating.student.enrollment_number }}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span class="detail-label">
+                        Roll Number
+                    </span>
+
+                    <span class="detail-value">
+                        {{ seating.student.roll_number }}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span class="detail-label">
+                        Name
+                    </span>
+
+                    <span class="detail-value">
+                        {{ seating.student.name }}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span class="detail-label">
+                        Branch
+                    </span>
+
+                    <span class="detail-value">
+                        {{ seating.student.branch }}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span class="detail-label">
+                        Semester
+                    </span>
+
+                    <span class="detail-value">
+                        {{ seating.student.semester }}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span class="detail-label">
+                        Room
+                    </span>
+
+                    <span class="detail-value">
+                        Room {{ seating.room.room_number }}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span class="detail-label">
+                        Row
+                    </span>
+
+                    <span class="detail-value">
+                        {{ seating.row_number }}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span class="detail-label">
+                        Table
+                    </span>
+
+                    <span class="detail-value">
+                        {{ seating.table_number }}
+                    </span>
+
+                </div>
+
+
+                <div class="seat-highlight">
+
+                    <small>
+                        YOUR SEAT
+                    </small>
+
+                    <strong>
+                        Seat {{ seating.seat_number }}
+                    </strong>
+
+
+                </div>
+
+
+            </div>
+
+
+            {% elif enrollment_number %}
+
+
+            <div class="error">
+
+                No seating found for this enrollment number.
+
+            </div>
+
+
+            {% endif %}
+
+
+            <a
+                href="{% url 'admin_panel' %}"
+                class="footer-link"
+            >
+                ← BACK
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>
+```

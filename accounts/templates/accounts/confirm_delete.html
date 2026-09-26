@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm delete | Seatify</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #f5f7f2; color: #18312d; font-family: "Segoe UI", Tahoma, sans-serif; }
+        header { padding: 20px max(20px, calc((100vw - 760px) / 2)); background: #104b3d; color: #fff; font-family: Georgia, serif; font-size: 23px; }
+        main { width: min(600px, calc(100% - 32px)); margin: 54px auto; padding: 30px; border: 1px solid #dce4dd; background: #fff; }
+        h1 { margin: 0 0 16px; font-family: Georgia, serif; font-size: 28px; font-weight: 400; }
+        p { line-height: 1.55; color: #53635e; }
+        .warning { padding: 14px; border-left: 3px solid #bd613b; background: #f0e9df; }
+        .actions { display: flex; gap: 12px; margin-top: 24px; }
+        button, .cancel { display: inline-block; padding: 11px 16px; border: 0; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
+        button { background: #a33b32; color: #fff; }
+        .cancel { background: #edf1ed; color: #18312d; }
+        .dashboard-link { display: inline-block; margin-top: 20px; color: #176b55; font-weight: 700; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <header>Seatify</header>
+    <main>
+        <h1>Delete this {{ object_type }}?</h1>
+        <p><strong>{{ object }}</strong> will be permanently deleted.</p>
+        {% if seating_count %}
+            <p class="warning">This will also remove {{ seating_count }} seating assignment{{ seating_count|pluralize }} linked to this record.</p>
+        {% else %}
+            <p>No seating assignments are linked to this record.</p>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="actions">
+                <button type="submit">Confirm Delete</button>
+                <a class="cancel" href="{{ cancel_url }}">Cancel</a>
+            </div>
+        </form>
+        <a class="dashboard-link" href="{% url 'admin_panel' %}">Back to Dashboard</a>
+    </main>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seatify | Admin Panel</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --ink: #18312d;
+            --muted: #687873;
+            --paper: #f5f7f2;
+            --line: #dce4dd;
+            --green: #176b55;
+            --green-dark: #104b3d;
+            --orange: #bd613b;
+            --white: #fff;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: "Segoe UI", Tahoma, sans-serif;
+        }
+
+        a { color: inherit; }
+
+        .topbar {
+            min-height: 74px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 14px max(24px, calc((100vw - 1240px) / 2));
+            background: var(--green-dark);
+            color: var(--white);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: Georgia, serif;
+            font-size: 24px;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 38px;
+            height: 38px;
+            place-items: center;
+            border: 1px solid #91b6a6;
+            color: #d2e7d9;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .account {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 14px;
+        }
+
+        .account a {
+            padding: 9px 13px;
+            border: 1px solid #91b6a6;
+            text-decoration: none;
+        }
+
+        .account a:hover { background: rgba(255, 255, 255, .1); }
+
+        main {
+            width: min(1240px, calc(100% - 48px));
+            margin: 36px auto 64px;
+        }
+
+        .page-heading {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        h1, h2, h3, p { margin-top: 0; }
+
+        h1 {
+            margin-bottom: 0;
+            font-family: Georgia, serif;
+            font-size: 34px;
+            font-weight: 400;
+        }
+
+        .date { margin: 0; color: var(--muted); font-size: 14px; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            border: 1px solid var(--line);
+            background: var(--white);
+        }
+
+        .stat {
+            min-height: 116px;
+            padding: 20px 22px;
+            border-right: 1px solid var(--line);
+        }
+
+        .stat:last-child { border-right: 0; }
+        .stat-label { margin: 0 0 10px; color: var(--muted); font-size: 13px; }
+        .stat-value { margin: 0; font-family: Georgia, serif; font-size: 32px; }
+
+        .section-heading {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 16px;
+            margin: 36px 0 12px;
+        }
+
+        h2 { margin: 0; font-family: Georgia, serif; font-size: 23px; font-weight: 400; }
+        .section-heading a { color: var(--green); font-size: 13px; font-weight: 700; text-decoration: none; }
+        .section-heading a:hover { text-decoration: underline; }
+
+        .workflow-list { border-top: 1px solid var(--line); }
+
+        .workflow {
+            display: grid;
+            grid-template-columns: 52px minmax(150px, 1fr) 2fr;
+            align-items: center;
+            gap: 18px;
+            min-height: 84px;
+            padding: 14px 8px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .step {
+            display: grid;
+            width: 36px;
+            height: 36px;
+            place-items: center;
+            border: 1px solid #a6c6b6;
+            border-radius: 50%;
+            color: var(--green-dark);
+            font-family: Georgia, serif;
+            font-size: 17px;
+        }
+
+        .workflow h3 { margin: 0; font-size: 16px; }
+        .workflow-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+
+        .workflow-links a {
+            color: var(--green);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .workflow-links a:hover { color: var(--orange); text-decoration: underline; }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) minmax(240px, .8fr);
+            gap: 42px;
+            margin-top: 38px;
+        }
+
+        .exam-table { width: 100%; border-collapse: collapse; background: var(--white); }
+        .exam-table th, .exam-table td { padding: 13px 15px; border-bottom: 1px solid var(--line); text-align: left; }
+        .exam-table th { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .exam-table td { font-size: 14px; }
+        .exam-table tr:last-child td { border-bottom: 0; }
+        .status { color: var(--green); font-size: 12px; font-weight: 700; }
+        .empty { padding: 24px 15px; color: var(--muted); }
+
+        .attention {
+            align-self: start;
+            padding: 20px;
+            border-left: 3px solid var(--orange);
+            background: #f0e9df;
+        }
+
+        .attention h2 { margin-bottom: 10px; font-size: 20px; }
+        .attention p { margin-bottom: 15px; color: #57483f; font-size: 14px; line-height: 1.5; }
+        .attention a { color: var(--green-dark); font-size: 14px; font-weight: 700; text-decoration: none; }
+
+        @media (max-width: 760px) {
+            .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .stat:nth-child(2) { border-right: 0; }
+            .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+            .workflow { grid-template-columns: 42px 1fr; gap: 10px; }
+            .workflow-links { grid-column: 2; }
+            .two-column { grid-template-columns: 1fr; gap: 24px; }
+        }
+
+        @media (max-width: 480px) {
+            .topbar { padding: 12px 16px; }
+            .brand { font-size: 20px; }
+            .account { gap: 8px; font-size: 12px; }
+            .account a { padding: 8px; }
+            main { width: calc(100% - 32px); margin-top: 25px; }
+            .page-heading { align-items: start; flex-direction: column; gap: 8px; }
+            h1 { font-size: 30px; }
+            .stat { min-height: 100px; padding: 16px; }
+            .exam-table th, .exam-table td { padding: 11px 8px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand"><span class="brand-mark">S</span><span>Seatify</span></div>
+        <div class="account">
+            <span>{{ request.user.get_full_name|default:request.user.username }}</span>
+            <a href="{% url 'faculty_logout' %}">Log out</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-heading">
+            <div>
+                <p class="eyebrow">Administration</p>
+                <h1>Admin panel</h1>
+            </div>
+            <p class="date">{{ today|date:"l, F j, Y" }}</p>
+        </section>
+
+        <section class="stats" aria-label="System totals">
+            <div class="stat"><p class="stat-label">Students on file</p><p class="stat-value">{{ student_count }}</p></div>
+            <div class="stat"><p class="stat-label">Upcoming exams</p><p class="stat-value">{{ exam_count }}</p></div>
+            <div class="stat"><p class="stat-label">Rooms available</p><p class="stat-value">{{ room_count }}</p></div>
+            <div class="stat"><p class="stat-label">Seats assigned for upcoming exams</p><p class="stat-value">{{ seat_count }}</p></div>
+        </section>
+
+        <section aria-labelledby="workflows-title">
+            <div class="section-heading">
+                <h2 id="workflows-title">Manage your records</h2>
+            </div>
+            <div class="workflow-list">
+                <div class="workflow">
+                    <span class="step">1</span>
+                    <h3>Students</h3>
+                    <div class="workflow-links">
+                        <a href="{% url 'student_list' %}">Find students</a>
+                        <a href="{% url 'add_student' %}">Add a student</a>
+                        <a href="{% url 'upload_students' %}">Import a spreadsheet</a>
+                        <a href="{% url 'student_seat' %}">Look up a seat</a>
+                    </div>
+                </div>
+                <div class="workflow">
+                    <span class="step">2</span>
+                    <h3>Rooms</h3>
+                    <div class="workflow-links">
+                        <a href="{% url 'room_list' %}">View rooms and capacity</a>
+                        <a href="{% url 'add_room' %}">Add a room</a>
+                    </div>
+                </div>
+                <div class="workflow">
+                    <span class="step">3</span>
+                    <h3>Exams</h3>
+                    <div class="workflow-links">
+                        <a href="{% url 'exam_list' %}">View exam schedule</a>
+                        <a href="{% url 'add_exam' %}">Add an exam</a>
+                        <a href="{% url 'upload_timetable' %}">Import a timetable</a>
+                    </div>
+                </div>
+                <div class="workflow">
+                    <span class="step">4</span>
+                    <h3>Seating</h3>
+                    <div class="workflow-links">
+                        <a href="{% url 'generate_seating' %}">Create seating plan</a>
+                        <a href="{% url 'seat_map' %}">View room seat map</a>
+                        <a href="{% url 'seat_map' %}">Select exam to download seating sheet</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="two-column">
+            <div>
+                <div class="section-heading"><h2>Upcoming exams</h2><a href="{% url 'exam_list' %}">All exams</a></div>
+                <table class="exam-table">
+                    <thead><tr><th>Exam</th><th>Date</th><th>Status</th></tr></thead>
+                    <tbody>
+                        {% for exam in recent_exams %}
+                            <tr>
+                                <td>{{ exam.subject }}<br><span style="color: var(--muted); font-size: 12px;">{{ exam.exam_name }} &middot; Semester {{ exam.semester }}</span></td>
+                                <td>{{ exam.exam_date|date:"M j, Y" }}<br><span style="color: var(--muted); font-size: 12px;">{{ exam.start_time|time:"g:i A" }}</span></td>
+                                <td><span class="status">{{ exam.status }}</span></td>
+                            </tr>
+                        {% empty %}
+                            <tr><td class="empty" colspan="3">No upcoming exams are scheduled.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <aside class="attention">
+                <h2>{{ pending_exam_count }} exam{{ pending_exam_count|pluralize }} need a seating plan</h2>
+                <p>Seating plans can be created for exams that do not have assigned seats yet.</p>
+                <a href="{% url 'generate_seating' %}">Go to seating setup &rarr;</a>
+            </aside>
+        </section>
+    </main>
+</body>
+</html>

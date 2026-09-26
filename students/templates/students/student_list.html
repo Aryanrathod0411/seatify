@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SEATIFY - Student Management</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+        .header {
+            background: #0c1c33;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 35px auto;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .top-section h2 {
+            color: #0c1c33;
+            margin: 0;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box input {
+            width: 280px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        .search-box button {
+            padding: 12px 20px;
+            background: #0c1c33;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .search-box button:hover {
+            background: #17365d;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            display: inline-block;
+            padding: 11px 18px;
+            background: #0c1c33;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .action-btn:hover {
+            background: #17365d;
+        }
+
+        /* Branch Section */
+
+        .branch-section {
+            background: white;
+            padding: 18px 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+        }
+
+        .branch-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0c1c33;
+            margin-bottom: 12px;
+        }
+
+        .branch-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .branch-btn {
+            padding: 10px 18px;
+            background: #eef2f7;
+            color: #0c1c33;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            border: 1px solid #d8dee8;
+        }
+
+        .branch-btn:hover {
+            background: #dfe7f2;
+        }
+
+        .branch-btn.active {
+            background: #0c1c33;
+            color: white;
+            border-color: #0c1c33;
+        }
+
+        .selected-info {
+            margin-top: 12px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #0c1c33;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f4f7fb;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .row-actions {
+            display: flex;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .row-actions a {
+            color: #0c1c33;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .row-actions a.delete { color: #a33b32; }
+
+        @media (max-width: 800px) {
+
+            .top-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            .actions {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>SEATIFY</h1>
+        <p>Smart Exam Seating Management System</p>
+    </div>
+
+
+    <div class="container">
+
+        <!-- TOP SECTION -->
+
+        <div class="top-section">
+
+            <h2>Student Management</h2>
+
+            <div class="actions">
+
+                <a href="/students/add/" class="action-btn">
+                    + Add Student
+                </a>
+
+                <a href="/students/upload/" class="action-btn">
+                    Upload Excel
+                </a>
+
+                <a href="{% url 'admin_panel' %}" class="action-btn">
+                    Back to Dashboard
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <form method="GET" class="search-box">
+
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="Search name or enrollment number"
+            >
+
+            {% if selected_branch %}
+                <input
+                    type="hidden"
+                    name="branch"
+                    value="{{ selected_branch }}"
+                >
+            {% endif %}
+
+            <button type="submit">
+                Search
+            </button>
+
+        </form>
+
+
+        <br>
+
+
+        <!-- BRANCH FILTER -->
+
+        <div class="branch-section">
+
+            <div class="branch-title">
+                Filter Students By Branch
+            </div>
+
+            <div class="branch-buttons">
+
+                <!-- ALL STUDENTS -->
+
+                <a
+                    href="/students/"
+                    class="branch-btn {% if not selected_branch %}active{% endif %}"
+                >
+                    All Students
+                </a>
+
+
+                <!-- BRANCHES -->
+
+                {% for branch in branches %}
+
+                <a
+                    href="/students/?branch={{ branch }}"
+                    class="branch-btn {% if selected_branch == branch %}active{% endif %}"
+                >
+                    {{ branch }}
+                </a>
+
+                {% endfor %}
+
+            </div>
+
+
+            {% if selected_branch %}
+
+            <div class="selected-info">
+                Showing students from branch:
+                <strong>{{ selected_branch }}</strong>
+            </div>
+
+            {% else %}
+
+            <div class="selected-info">
+                Showing students from all branches.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- STUDENT TABLE -->
+
+        <div class="table-container">
+
+            <table>
+
+                <tr>
+                    <th>Roll Number</th>
+                    <th>Name</th>
+                    <th>Enrollment Number</th>
+                    <th>Branch</th>
+                    <th>Semester</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+
+
+                {% for student in students %}
+
+                <tr>
+
+                    <td>
+                        {{ student.roll_number }}
+                    </td>
+
+                    <td>
+                        {{ student.name }}
+                    </td>
+
+                    <td>
+                        {{ student.enrollment_number }}
+                    </td>
+
+                    <td>
+                        {{ student.branch }}
+                    </td>
+
+                    <td>
+                        {{ student.semester }}
+                    </td>
+
+                    <td>
+                        {{ student.email }}
+                    </td>
+                    <td class="row-actions">
+                        <a href="{% url 'edit_student' student.id %}">Edit</a>
+                        <a class="delete" href="{% url 'delete_student' student.id %}">Delete</a>
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="empty"
+                    >
+                        No students found.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

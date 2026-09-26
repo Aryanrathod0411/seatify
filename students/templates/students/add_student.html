@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SEATIFY - Add Student</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+        .header {
+            background: #0c1c33;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 40px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: #0c1c33;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #0c1c33;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #17365d;
+        }
+
+        .back-btn {
+            display: block;
+            margin-top: 18px;
+            color: #0c1c33;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>SEATIFY</h1>
+        <p>Smart Exam Seating Management System</p>
+    </div>
+
+    <div class="container">
+
+        <div class="card">
+
+            <h2>{% if student %}Edit Student{% else %}Add Student{% endif %}</h2>
+
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">{% if student %}Save Changes{% else %}Add Student{% endif %}</button>
+
+            </form>
+            <a href="{% url 'admin_panel' %}" class="back-btn">Back to Dashboard</a>
+            <a href="/students/" class="back-btn">Back to Students</a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

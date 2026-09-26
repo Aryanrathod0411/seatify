@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SEATIFY - Seat Map</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f4f7fb;
+
+            color: #1f2937;
+        }
+
+
+        /* Header */
+
+        .header {
+
+            background: #0c1c33;
+
+            color: white;
+
+            padding: 28px;
+
+            text-align: center;
+        }
+
+
+        .header h1 {
+
+            margin: 0;
+
+            font-size: 32px;
+        }
+
+
+        .header p {
+
+            margin: 8px 0 0;
+
+            font-size: 18px;
+
+            opacity: 0.9;
+        }
+
+
+        /* Main */
+
+        .container {
+
+            width: 94%;
+
+            max-width: 1250px;
+
+            margin: 35px auto;
+        }
+
+
+        .card {
+
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0,0,0,0.08);
+
+            margin-bottom: 25px;
+        }
+
+
+        .card h2 {
+
+            margin-top: 0;
+
+            color: #0c1c33;
+        }
+
+
+        /* Exam Search */
+
+        .search-row {
+
+            display: flex;
+
+            gap: 15px;
+
+            align-items: center;
+        }
+
+
+        .exam-select {
+
+            flex: 1;
+
+            padding: 14px;
+
+            border: 1px solid #ccd3dc;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+
+            background: white;
+        }
+
+
+        .search-btn {
+
+            padding: 14px 25px;
+
+            background: #0c1c33;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+        }
+
+
+        .search-btn:hover {
+
+            background: #17365d;
+        }
+
+        .download-btn {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 12px 18px;
+            background: #176b55;
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .download-btn:hover {
+            background: #104b3d;
+        }
+
+
+        /* Room Section */
+
+        .room-title {
+
+            margin-bottom: 18px;
+
+            color: #0c1c33;
+
+            font-size: 22px;
+
+            font-weight: bold;
+        }
+
+
+        .room-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 15px;
+        }
+
+
+        .room-card {
+
+            display: block;
+
+            padding: 20px;
+
+            background: #f4f7fb;
+
+            border: 2px solid #e1e7ef;
+
+            border-radius: 12px;
+
+            text-decoration: none;
+
+            color: #0c1c33;
+
+            transition: 0.2s;
+
+        }
+
+
+        .room-card:hover {
+
+            border-color: #0c1c33;
+
+            background: white;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 5px 15px
+                rgba(0,0,0,0.08);
+        }
+
+
+        .room-name {
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+
+        .room-info {
+
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        .no-rooms {
+
+            background: #fff7ed;
+
+            color: #9a3412;
+
+            padding: 15px;
+
+            border-radius: 8px;
+        }
+
+
+        /* Exam Information */
+
+        .exam-info {
+
+            border-left: 5px solid #0c1c33;
+        }
+
+
+        .exam-name {
+
+            font-size: 18px;
+
+            color: #64748b;
+
+            margin-bottom: 5px;
+        }
+
+
+        .subject {
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            color: #0c1c33;
+
+            margin-bottom: 20px;
+        }
+
+
+        .info-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(180px, 1fr));
+
+            gap: 15px;
+        }
+
+
+        .info-box {
+
+            background: #f4f7fb;
+
+            padding: 18px;
+
+            border-radius: 10px;
+        }
+
+
+        .info-label {
+
+            color: #64748b;
+
+            font-size: 14px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .info-value {
+
+            font-weight: bold;
+
+            color: #0c1c33;
+
+            font-size: 16px;
+        }
+
+
+        /* Seat Map */
+
+        .map-title {
+
+            text-align: center;
+
+            color: #0c1c33;
+
+            margin-bottom: 8px;
+        }
+
+
+        .map-subtitle {
+
+            text-align: center;
+
+            color: #64748b;
+
+            margin-bottom: 25px;
+        }
+
+
+        .row-section {
+
+            margin-bottom: 25px;
+        }
+
+
+        .row-title {
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            color: #0c1c33;
+
+            margin-bottom: 12px;
+        }
+
+
+        .tables {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(160px, 1fr));
+
+            gap: 15px;
+        }
+
+
+        .table-box {
+
+            background: #f4f7fb;
+
+            border: 1px solid #dbe2ea;
+
+            border-radius: 10px;
+
+            padding: 12px;
+        }
+
+
+        .table-title {
+
+            font-weight: bold;
+
+            text-align: center;
+
+            color: #0c1c33;
+
+            margin-bottom: 10px;
+        }
+
+
+        .seats {
+
+            display: flex;
+
+            gap: 8px;
+        }
+
+
+        .seat {
+
+            flex: 1;
+
+            min-height: 80px;
+
+            border-radius: 8px;
+
+            padding: 8px;
+
+            text-align: center;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            border: 1px solid #d1d5db;
+
+            background: white;
+        }
+
+
+        .seat-number {
+
+            font-size: 12px;
+
+            color: #64748b;
+
+            margin-bottom: 5px;
+        }
+
+
+        .student-roll {
+
+            font-weight: bold;
+
+            color: #0c1c33;
+
+            font-size: 14px;
+
+        }
+
+
+        .student-name {
+
+            font-size: 12px;
+
+            margin-top: 4px;
+
+            color: #475569;
+
+        }
+
+
+        .empty-seat {
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+        }
+
+
+        .back-btn {
+
+            display: inline-block;
+
+            margin-top: 5px;
+
+            color: #0c1c33;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+
+        .back-btn:hover {
+
+            text-decoration: underline;
+        }
+
+
+        @media (max-width: 700px) {
+
+            .search-row {
+
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+
+            .search-btn {
+
+                width: 100%;
+            }
+
+
+            .tables {
+
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- Header -->
+
+    <div class="header">
+
+        <h1>
+            SEATIFY
+        </h1>
+
+        <p>
+            Smart Exam Seating Management System
+        </p>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <!-- Exam Selection -->
+
+        <div class="card">
+
+            <h2>
+                View Seat Map
+            </h2>
+
+
+            <form
+                method="GET"
+                action="/seating/map/"
+            >
+
+                <div class="search-row">
+
+
+                    <select
+                        name="exam_id"
+                        class="exam-select"
+                        required
+                    >
+
+                        <option value="">
+                            Select Exam
+                        </option>
+
+
+                        {% for item in exams %}
+
+                        <option
+                            value="{{ item.id }}"
+                            {% if exam and item.id == exam.id %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ item.exam_name }}
+                            -
+                            {{ item.subject }}
+                            -
+                            Semester {{ item.semester }}
+                            -
+                            {{ item.exam_date|date:"M d, Y" }}
+
+                        </option>
+
+                        {% endfor %}
+
+
+                    </select>
+
+
+                    <button
+                        type="submit"
+                        class="search-btn"
+                    >
+                        Search
+                    </button>
+
+
+                </div>
+
+            </form>
+
+            {% if exam %}
+            <a
+                href="{% url 'export_seating_excel' %}?exam_id={{ exam.id }}"
+                class="download-btn"
+            >
+                Download {{ exam.subject }} Seating Excel
+            </a>
+            {% endif %}
+
+            <br>
+
+
+            <a
+                href="{% url 'admin_panel' %}"
+                class="back-btn"
+            >
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+
+
+        <!-- Rooms -->
+
+        {% if exam and not room %}
+
+        <div class="card">
+
+            <div class="room-title">
+                🏫 Select Room
+            </div>
+
+
+            <p>
+                This exam's seating has been generated
+                in the following rooms. Select a room
+                to view its seat map.
+            </p>
+
+
+            {% if rooms %}
+
+            <div class="room-grid">
+
+
+                {% for item in rooms %}
+
+                <a
+                    href="/seating/map/?exam_id={{ exam.id }}&room_id={{ item.id }}"
+                    class="room-card"
+                >
+
+                    <div class="room-name">
+
+                        🏫 Room {{ item.room_number }}
+
+                    </div>
+
+
+                    <div class="room-info">
+
+                        Capacity:
+                        {{ item.capacity }}
+
+                        <br>
+
+                        {{ item.rows }}
+                        Rows ×
+                        {{ item.tables_per_row }}
+                        Tables ×
+                        {{ item.seats_per_table }}
+                        Seats
+
+                    </div>
+
+                </a>
+
+                {% endfor %}
+
+
+            </div>
+
+
+            {% else %}
+
+            <div class="no-rooms">
+
+                No seating arrangement has been
+                generated for this exam.
+
+            </div>
+
+            {% endif %}
+
+
+        </div>
+
+        {% endif %}
+
+
+
+        <!-- Exam Information -->
+
+        {% if exam and room %}
+
+        <div class="card exam-info">
+
+
+            <div class="exam-name">
+
+                {{ exam.exam_name }}
+
+            </div>
+
+
+            <div class="subject">
+
+                {{ exam.subject }}
+
+            </div>
+
+
+            <div class="info-grid">
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        📅 Exam Date
+                    </div>
+
+                    <div class="info-value">
+
+                        {{ exam.exam_date|date:"M d, Y" }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        ⏰ Exam Time
+                    </div>
+
+                    <div class="info-value">
+
+                        {{ exam.start_time|time:"g a" }}
+                        -
+                        {{ exam.end_time|time:"g a" }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        🏫 Room
+                    </div>
+
+                    <div class="info-value">
+
+                        Room {{ room.room_number }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        💺 Capacity
+                    </div>
+
+                    <div class="info-value">
+
+                        {{ room.capacity }} Seats
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Seat Map -->
+
+        <div class="card">
+
+
+            <h2 class="map-title">
+
+                Room {{ room.room_number }}
+                - Seating Map
+
+            </h2>
+
+
+            <div class="map-subtitle">
+
+                Capacity:
+                {{ room.capacity }}
+
+                |
+
+                Rows:
+                {{ room.rows }}
+
+                |
+
+                Tables per Row:
+                {{ room.tables_per_row }}
+
+                |
+
+                Seats per Table:
+                {{ room.seats_per_table }}
+
+            </div>
+
+
+
+            {% for row in rows %}
+
+            <div class="row-section">
+
+
+                <div class="row-title">
+
+                    Row {{ row.number }}
+
+                </div>
+
+
+                <div class="tables">
+
+
+                    {% for table in row.tables %}
+
+                    <div class="table-box">
+
+
+                        <div class="table-title">
+
+                            Table {{ table.number }}
+
+                        </div>
+
+
+                        <div class="seats">
+
+
+                            {% for seat in table.seats %}
+
+                            <div class="seat">
+
+
+                                <div class="seat-number">
+
+                                    Seat {{ seat.number }}
+
+                                </div>
+
+
+                                {% if seat.seating %}
+
+                                <div class="student-roll">
+
+                                    {{ seat.seating.student.roll_number }}
+
+                                </div>
+
+
+                                <div class="student-name">
+
+                                    {{ seat.seating.student.name }}
+
+                                </div>
+
+
+                                {% else %}
+
+                                <div class="empty-seat">
+
+                                    Empty
+
+                                </div>
+
+                                {% endif %}
+
+
+                            </div>
+
+                            {% endfor %}
+
+
+                        </div>
+
+
+                    </div>
+
+                    {% endfor %}
+
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+
+            <br>
+
+
+            <a
+                href="/seating/map/?exam_id={{ exam.id }}"
+                class="back-btn"
+            >
+                ← Back to Rooms
+            </a>
+
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+
+</body>
+
+</html>

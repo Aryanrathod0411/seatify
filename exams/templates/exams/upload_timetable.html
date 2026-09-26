@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Timetable - SEATIFY</title>
+</head>
+
+<body>
+
+    <h1>SEATIFY - Upload Exam Timetable</h1>
+
+    <p>Select the Excel file containing the exam timetable.</p>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <input
+            type="file"
+            name="timetable_file"
+            accept=".xlsx,.xls"
+            required
+        >
+
+        <br><br>
+
+        <button type="submit">
+            Upload Timetable
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="{% url 'admin_panel' %}">
+        Back to Dashboard
+    </a>
+
+</body>
+</html>
